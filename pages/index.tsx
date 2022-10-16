@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { FormEvent, useRef } from 'react';
+import axios from 'axios';
 
 const Home: NextPage = () => {
     const emailInputRef = useRef<any>(null);
@@ -13,6 +14,25 @@ const Home: NextPage = () => {
 
         const enteredEmail = emailInputRef.current.value;
         const enteredFeedback = feedbackInputRef.current.value;
+        const reqBody = {
+            email: enteredEmail,
+            text: enteredFeedback,
+        };
+        axios
+            .post(
+                '/api/feedback',
+                {
+                    email: enteredEmail,
+                    text: enteredFeedback,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
+            .then((response) => response)
+            .then((data) => console.log(data));
     };
 
     return (
@@ -34,3 +54,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
