@@ -2,12 +2,13 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import axios from 'axios';
 
 const Home: NextPage = () => {
     const emailInputRef = useRef<any>(null);
     const feedbackInputRef = useRef<any>(null);
+    const [feedbackItems, setFeedbackItems] = useState<any[]>([]);
 
     const submitFormHandler = (event: FormEvent) => {
         event.preventDefault();
@@ -35,6 +36,10 @@ const Home: NextPage = () => {
             .then((data) => console.log(data));
     };
 
+    function loadFeedbackHandler() {
+        axios.get('/api/feedback').then((response) => setFeedbackItems(response.data.feedback));
+    }
+
     return (
         <div className={styles.container}>
             <h1>The Home Page</h1>
@@ -49,9 +54,15 @@ const Home: NextPage = () => {
                 </div>
                 <button>Send Feedback</button>
             </form>
+            <hr />
+            <button onClick={loadFeedbackHandler}>Load Feedback</button>
+            <ul>
+                {feedbackItems.map((item) => (
+                    <li key={item.id}>{item.text}</li>
+                ))}
+            </ul>
         </div>
     );
 };
 
 export default Home;
-
