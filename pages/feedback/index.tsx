@@ -12,7 +12,9 @@ interface FeedbackResponseType {
 const FeedbackPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     const [feedbackData, setFeedbackData] = useState<FeedbackResponseType>();
     const loadFeedbackHandler = (id: string) => {
-        axios.post(`/api/${id}`).then((response) => setFeedbackData(response.data.feedback));
+        axios
+            .post(`/api/feedback/${id}`)
+            .then((response) => setFeedbackData(response.data.feedback));
     };
 
     return (
